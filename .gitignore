@@ -2,9 +2,12 @@
 /dbt_packages
 /target
 /logs
+/dbt_modules
 
 # Removing Sensitive And System Dir
 .git
 .env
 .user.yml
 .idea
+
+.DS_Store
