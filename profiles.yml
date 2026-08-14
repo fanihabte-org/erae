@@ -1,0 +1,12 @@
+dev:
+  target: "{{ env_var('PG_TARGET', 'dev') }}"
+  outputs:
+    dev:
+      type: postgres
+      host: "{{ env_var('PG_HOST') }}"
+      dbname: "{{ env_var('PG_DB_NAME') }}"
+      user: "{{ env_var('PG_USER') }}"
+      password: "{{ env_var('PG_PASSWORD') }}"
+      port: "{{ env_var('PG_PORT') | int }}"
+      schema: "dbt_{{ env_var('PG_SCHEMA') }}"
+      threads: 4

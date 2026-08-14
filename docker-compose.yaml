@@ -1,0 +1,11 @@
+services:
+  dbt:
+    image: fanihabte/base-dbt-postgres:1.0.0
+    volumes:
+      - .:/usr/app/dbt
+      - dbt-packages:/opt/dbt_packages
+    env_file:
+      - .env
+
+volumes:
+  dbt-packages:
