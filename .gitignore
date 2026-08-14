@@ -1,6 +1,10 @@
-.git
-.env
+# Removing Auto Generated Packages
+/dbt_packages
 /target
 /logs
+
+# Removing Sensitive And System Dir
+.git
+.env
 .user.yml
 .idea

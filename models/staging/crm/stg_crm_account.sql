@@ -12,10 +12,10 @@ with crm_account_cleaned as (
         , isdeleted::boolean            as is_deleted
         , createddate::timestamp
               at time zone 'America/Los_Angeles'
-              at time zone 'UTC'        as create_timestamp
+              at time zone 'UTC'        as created_at
         , lastmodifieddate::timestamp
               at time zone 'America/Los_Angeles'
-              at time zone 'UTC'        as update_timestamp
+              at time zone 'UTC'        as updated_at
         , dw_run_timestamp::timestamp
               at time zone 'America/Los_Angeles'
               at time zone 'UTC'        as dw_run_timestamp
