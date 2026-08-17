@@ -4,7 +4,7 @@ with ops_orders_cleaned as (
         , customer_id::bigint
         , trim(opportunity_ref)::bigint   as opportunity_id
         , trim(upper(rep_id))             as rep_id
-        , trim(upper(po_number))          as po_number
+        , trim(upper(po_number))          as purchase_id
         , trim(upper(currency_code))      as currency_iso_code
         , trim(upper(status))             as status
         , trim(upper(sales_channel))      as sales_channel

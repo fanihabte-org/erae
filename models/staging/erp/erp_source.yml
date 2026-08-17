@@ -1,0 +1,10 @@
+sources:
+  - name: finance
+    database: rev_engine_bronze
+    schema: erp
+    tables:
+        - name: companies
+        - name: cost_centers
+        - name: fx_rates
+        - name: gl_accounts
+        - name: revenue_postings

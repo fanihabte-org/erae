@@ -1,7 +1,7 @@
 with ops_customers_cleaned as (
     select
         customer_id::bigint           as id
-        , trim(upper(account_number)) as account_id
+        , trim(upper(account_number)) as account_number
         , trim(upper(company_code))   as company_id
         , trim(upper(customer_name))  as name
         , trim(upper(segment))        as segment

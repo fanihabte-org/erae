@@ -1,0 +1,14 @@
+sources:
+  - name: operations
+    database: rev_engine_bronze
+    schema: ops
+    tables:
+      - name: carriers
+      - name: customers
+      - name: invoices
+      - name: order_lines
+      - name: orders
+      - name: products
+      - name: shipments
+      - name: support_cases
+      - name: warehouses

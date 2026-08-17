@@ -1,0 +1,7 @@
+sources:
+  - name: salesforce
+    database: rev_engine_bronze
+    schema: crm
+    tables:
+      - name: account
+      - name: opportunity
