@@ -1,2 +1,67 @@
+name: "ERAE Dbt"
 on:
+  push:
+    branches:
+      - main
+
 jobs:
+  build:
+    name: Build & Test DBT
+    runs-on: ubuntu-latest
+    env:
+      PG_DB_NAME: ${{ secrets.PG_DB_NAME }}
+      PG_HOST: my-test-postgres  # Must match the container name for inter-container DNS
+      PG_PASSWORD: ${{ secrets.PG_PASSWORD }}
+      PG_USER: ${{ secrets.PG_USER }}
+      PG_PORT: 5432
+      PG_SCHEMA: ${{ secrets.PG_SCHEMA }}
+      PG_TARGET: ${{ secrets.PG_TARGET }}
+
+    steps:
+      - name: Pull git repo
+        uses: actions/checkout@v4
+
+      - name: Create Docker Network
+        run: docker network create dbt-net
+
+      - name: Create .env File
+        run: |
+          cat <<EOF > .env
+          PG_DB_NAME=${PG_DB_NAME}
+          PG_HOST=${PG_HOST}
+          PG_PASSWORD=${PG_PASSWORD}
+          PG_USER=${PG_USER}
+          PG_PORT=${PG_PORT}
+          PG_SCHEMA=${PG_SCHEMA}
+          PG_TARGET=${PG_TARGET}
+          EOF
+
+      - name: Start Postgres Instance
+        run: |
+          docker run -d \
+            --name my-test-postgres \
+            --network dbt-net \
+            -e POSTGRES_DB=$PG_DB_NAME \
+            -e POSTGRES_USER=$PG_USER \
+            -e POSTGRES_PASSWORD=$PG_PASSWORD \
+            -p 5432:5432 \
+            postgres:15
+
+      - name: Wait for Postgres to be ready
+        run: |
+          until docker exec my-test-postgres pg_isready -U $PG_USER -d $PG_DB_NAME; do
+            echo "Waiting for postgres to accept connections..."
+            sleep 2
+          done
+
+      - name: Run DBT Test
+        run: |
+          docker compose run --rm --network dbt-net dbt test
+
+#      - name: Clean Up Resources
+#        if: always()
+#        run: |
+#          docker stop my-test-postgres || true
+#          docker rm my-test-postgres || true
+#          docker network rm dbt-net || true
+#          rm -f .env
