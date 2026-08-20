@@ -10,12 +10,15 @@ jobs:
     runs-on: ubuntu-latest
     env:
       PG_DB_NAME: ${{ secrets.PG_DB_NAME }}
-      PG_HOST: my-test-postgres  # Must match the container name for inter-container DNS
+      PG_HOST: my-test-postgres
       PG_PASSWORD: ${{ secrets.PG_PASSWORD }}
       PG_USER: ${{ secrets.PG_USER }}
       PG_PORT: 5432
       PG_SCHEMA: ${{ secrets.PG_SCHEMA }}
       PG_TARGET: ${{ secrets.PG_TARGET }}
+      DBT_PROFILES_DIR: ${{ secrets.DBT_PROFILES_DIR }}
+      DBT_PROFILE: ${{ secrets.DBT_PROFILE }}
+      PG_SNAPSHOT_SCHEMA: ${{ secrets.PG_SNAPSHOT_SCHEMA }}
 
     steps:
       - name: Pull git repo
@@ -34,6 +37,9 @@ jobs:
           PG_PORT=${PG_PORT}
           PG_SCHEMA=${PG_SCHEMA}
           PG_TARGET=${PG_TARGET}
+          DBT_PROFILES_DIR= ${DBT_PROFILES_DIR}
+          DBT_PROFILE= ${DBT_PROFILE}
+          PG_SNAPSHOT_SCHEMA= ${PG_SNAPSHOT_SCHEMA}
           EOF
 
       - name: Start Postgres Instance
@@ -56,6 +62,7 @@ jobs:
 
       - name: Run DBT Test
         run: |
+          docker compose run -rm --network dbt-net dbt deps
           docker compose run --rm --network dbt-net dbt test
 
 #      - name: Clean Up Resources
