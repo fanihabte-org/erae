@@ -1,6 +1,8 @@
 select
-    {{ dbt_utils.generate_surrogate_key(['id', 'updated_at', 'status']) }}  as status_event_key
+    {{
+        dbt_utils.generate_surrogate_key(['order_key', 'status'])
+    }}             as status_event_key
+    , order_key
     , status
-    , id         as order_id
-    , updated_at
-from {{ ref('stg_ops_orders') }}
+    , updated_at   as changed_at
+from {{ ref('inter_orders') }}

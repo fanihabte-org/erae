@@ -4,18 +4,22 @@ with orders as (
             dbt_utils.generate_surrogate_key( ['soo.id', 'soo.updated_at'] )
         }}                         as order_key
         , soo.id                   as order_id
-        , soo.customer_id          as customer_key
-        , soo.opportunity_id       as opportunity_key
-        , soo.sales_channel        as channel_key
-        , soo.status               as current_status
-        , soo.order_date           as order_date_key
---         , soo.ship_date            as ship_date_key
---         , soo.invoice_date         as invoice_date_key
-        , sum(sorl.line_amount)    as total_amount
+        , icu.customer_key
+        , iop.opportunity_key
+        , idts.date_key            as order_date_key
+        , soo.status
+        , updated_at
     from {{ ref('stg_ops_orders') }} soo
-    join {{ ref('stg_ops_order_lines') }} sorl
-        on sorl.order_id = soo.id
-    group by 1,2,3,4,5,6,7
+    left join {{ ref('inter_customers') }} icu
+        on soo.customer_id = icu.customer_id
+        and soo.created_at >= icu.valid_from
+        and soo.created_at < icu.valid_to
+    join {{ ref('inter_opportunities') }} iop
+        on soo.opportunity_id = iop.opportunity_id
+        and soo.created_at >= iop.valid_from
+        and soo.created_at < iop.valid_to
+    join {{ ref('inter_dates') }} idts
+        on soo.order_date = idts.full_date
 )
 
 select * from orders

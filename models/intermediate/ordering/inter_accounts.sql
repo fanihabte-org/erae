@@ -14,9 +14,8 @@ select
     , is_deleted
     , annual_revenue
     , number_of_employees
-    , dbt_valid_from               as valid_from
-    , dbt_valid_to                 as valid_to
-    , case
-        when dbt_valid_to is null
-        then true else false end   as is_current
+    , dbt_valid_from                    as valid_from
+    , coalesce(dbt_valid_to,
+               '9999-12-31'::timestamp) as valid_to
+    , dbt_valid_to is null              as is_current
 from snapshot_accounts

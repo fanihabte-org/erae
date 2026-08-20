@@ -3,8 +3,8 @@ with snapshot_customers as (
 )
 
 select
-    dbt_scd_id            as customer_key
-    , id                  as customer_id
+    dbt_scd_id                         as customer_key
+    , id                               as customer_id
     , name
     , segment
     , industry
@@ -12,9 +12,8 @@ select
     , employee_count
     , credit_limit_usd
     , is_active
-    , dbt_valid_to        as valid_to
-    , dbt_valid_from      as valid_from
-    , case
-        when dbt_valid_to is null
-        then true else false end   as is_current
+    , coalesce(dbt_valid_to,
+               '9999-12-31'::timestamp) as valid_to
+    , dbt_valid_from                    as valid_from
+    , dbt_valid_to is null              as is_current
 from snapshot_customers
