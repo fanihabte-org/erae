@@ -1,0 +1,17 @@
+services:
+  postgres:
+    image: postgres:15.8
+    environment:
+      POSTGRES_DB: ${PG_DB_NAME}
+      POSTGRES_USER: ${PG_USER}
+      POSTGRES_PASSWORD: ${PG_PASSWORD}
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${PG_USER} -d ${PG_DB_NAME}"]
+      interval: 2s
+      timeout: 3s
+      retries: 20
+
+  dbt:
+    depends_on:
+      postgres:
+        condition: service_healthy

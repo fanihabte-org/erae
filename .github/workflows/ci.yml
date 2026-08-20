@@ -1,75 +1,31 @@
 name: "ERAE Dbt"
 on:
+  pull_request:
   push:
-    branches:
-      - main
+    branches: ['main']
+
+env:
+  COMPOSE: docker compose --env-file .env.ci -f docker-compose.yml -f docker-compose.ci.yml
 
 jobs:
   build:
     name: Build & Test DBT
     runs-on: ubuntu-latest
-    env:
-      PG_DB_NAME: ${{ vars.PG_DB_NAME }}
-      PG_HOST: my-test-postgres
-      PG_PASSWORD: ${{ vars.PG_PASSWORD }}
-      PG_USER: ${{ vars.PG_USER }}
-      PG_PORT: 5432
-      PG_SCHEMA: ${{ vars.PG_SCHEMA }}
-      PG_TARGET: ${{ vars.PG_TARGET }}
-      DBT_PROFILES_DIR: ${{ vars.DBT_PROFILES_DIR }}
-      DBT_PROFILE: ${{ vars.DBT_PROFILE }}
-      PG_SNAPSHOT_SCHEMA: ${{ vars.PG_SNAPSHOT_SCHEMA }}
 
     steps:
       - name: Pull git repo
         uses: actions/checkout@v4
 
-      - name: Create Docker Network
-        run: docker network create dbt-net
+      - name: Install Just
+        uses: extractions/setup-just@v2
 
-      - name: Create .env File
+      - name: Install dbt dependencies
         run: |
-          cat <<EOF > .env
-          PG_DB_NAME=${PG_DB_NAME}
-          PG_HOST=${PG_HOST}
-          PG_PASSWORD=${PG_PASSWORD}
-          PG_USER=${PG_USER}
-          PG_PORT=${PG_PORT}
-          PG_SCHEMA=${PG_SCHEMA}
-          PG_TARGET=${PG_TARGET}
-          DBT_PROFILES_DIR=${DBT_PROFILES_DIR}
-          DBT_PROFILE=${DBT_PROFILE}
-          PG_SNAPSHOT_SCHEMA=${PG_SNAPSHOT_SCHEMA}
-          EOF
+          just deps
 
-      - name: Start Postgres Instance
+      - name: Parse
         run: |
-          docker run -d \
-            --name my-test-postgres \
-            --network dbt-net \
-            -e POSTGRES_DB=$PG_DB_NAME \
-            -e POSTGRES_USER=$PG_USER \
-            -e POSTGRES_PASSWORD=$PG_PASSWORD \
-            -p 5432:5432 \
-            postgres:15
+          just parse
 
-      - name: Wait for Postgres to be ready
-        run: |
-          docker inspect -f '{{.State.Running}}' my-test-postgres
-          until docker exec my-test-postgres pg_isready -U $PG_USER -d $PG_DB_NAME; do
-            echo "Waiting for postgres to accept connections..."
-            sleep 2
-          done
-
-      - name: Run DBT Test
-        run: |
-          docker compose run --network dbt-net --rm dbt deps
-          docker compose run --network dbt-net --rm dbt test
-
-#      - name: Clean Up Resources
-#        if: always()
-#        run: |
-#          docker stop my-test-postgres || true
-#          docker rm my-test-postgres || true
-#          docker network rm dbt-net || true
-#          rm -f .env
+      - if: always()
+        run: $COMPOSE down -v

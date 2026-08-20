@@ -1,7 +1,7 @@
-dev:
+erae:
   target: "{{ env_var('PG_TARGET', 'dev') }}"
   outputs:
-    dev:
+    dev: &pg
       type: postgres
       host: "{{ env_var('PG_HOST') }}"
       dbname: "{{ env_var('PG_DB_NAME') }}"
@@ -9,4 +9,5 @@ dev:
       password: "{{ env_var('PG_PASSWORD') }}"
       port: "{{ env_var('PG_PORT') | int }}"
       schema: "dbt_{{ env_var('PG_SCHEMA') }}"
-      threads: 4
+      threads: 6
+    ci: *pg

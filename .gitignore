@@ -11,3 +11,6 @@
 .idea
 
 .DS_Store
+
+# Ignore .env.ci file
+!.env.ci
