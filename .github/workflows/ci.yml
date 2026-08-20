@@ -9,16 +9,16 @@ jobs:
     name: Build & Test DBT
     runs-on: ubuntu-latest
     env:
-      PG_DB_NAME: ${{ secrets.PG_DB_NAME }}
+      PG_DB_NAME: ${{ vars.PG_DB_NAME }}
       PG_HOST: my-test-postgres
-      PG_PASSWORD: ${{ secrets.PG_PASSWORD }}
-      PG_USER: ${{ secrets.PG_USER }}
+      PG_PASSWORD: ${{ vars.PG_PASSWORD }}
+      PG_USER: ${{ vars.PG_USER }}
       PG_PORT: 5432
-      PG_SCHEMA: ${{ secrets.PG_SCHEMA }}
-      PG_TARGET: ${{ secrets.PG_TARGET }}
-      DBT_PROFILES_DIR: ${{ secrets.DBT_PROFILES_DIR }}
-      DBT_PROFILE: ${{ secrets.DBT_PROFILE }}
-      PG_SNAPSHOT_SCHEMA: ${{ secrets.PG_SNAPSHOT_SCHEMA }}
+      PG_SCHEMA: ${{ vars.PG_SCHEMA }}
+      PG_TARGET: ${{ vars.PG_TARGET }}
+      DBT_PROFILES_DIR: ${{ vars.DBT_PROFILES_DIR }}
+      DBT_PROFILE: ${{ vars.DBT_PROFILE }}
+      PG_SNAPSHOT_SCHEMA: ${{ vars.PG_SNAPSHOT_SCHEMA }}
 
     steps:
       - name: Pull git repo
@@ -37,9 +37,9 @@ jobs:
           PG_PORT=${PG_PORT}
           PG_SCHEMA=${PG_SCHEMA}
           PG_TARGET=${PG_TARGET}
-          DBT_PROFILES_DIR= ${DBT_PROFILES_DIR}
-          DBT_PROFILE= ${DBT_PROFILE}
-          PG_SNAPSHOT_SCHEMA= ${PG_SNAPSHOT_SCHEMA}
+          DBT_PROFILES_DIR=${DBT_PROFILES_DIR}
+          DBT_PROFILE=${DBT_PROFILE}
+          PG_SNAPSHOT_SCHEMA=${PG_SNAPSHOT_SCHEMA}
           EOF
 
       - name: Start Postgres Instance
@@ -55,6 +55,7 @@ jobs:
 
       - name: Wait for Postgres to be ready
         run: |
+          docker inspect -f '{{.State.Running}}' my-test-postgres
           until docker exec my-test-postgres pg_isready -U $PG_USER -d $PG_DB_NAME; do
             echo "Waiting for postgres to accept connections..."
             sleep 2
