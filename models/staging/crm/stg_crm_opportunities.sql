@@ -17,10 +17,10 @@ with crm_opportunity_cleaned as (
         , closedate::date                as close_date
         , createddate::timestamp
               at time zone 'America/Los_Angeles'
-              at time zone 'UTC'         as create_at
+              at time zone 'UTC'         as created_at
         , lastmodifieddate::timestamp
               at time zone 'America/Los_Angeles'
-              at time zone 'UTC'         as update_at
+              at time zone 'UTC'         as updated_at
         , dw_run_timestamp::timestamp
               at time zone 'America/Los_Angeles'
               at time zone 'UTC'         as dw_run_timestamp

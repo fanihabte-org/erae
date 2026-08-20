@@ -38,3 +38,9 @@ models:
       +materialized: view
     marts:
       +materialized: table
+
+snapshots:
+  data_forge_analytics:
+    ordering:
+      +target_database: rev_engine_bronze
+      +target_schema: snapshots
