@@ -63,7 +63,7 @@ jobs:
 
       - name: Run DBT Test
         run: |
-          docker compose run -rm --network dbt-net dbt deps
+          docker compose run --rm --network dbt-net dbt deps
           docker compose run --rm --network dbt-net dbt test
 
 #      - name: Clean Up Resources
