@@ -30,12 +30,12 @@ jobs:
     steps:
       - name: Update repo
         run: |
-          cd ~"$PROJECT_DIR"
+          cd "$PROJECT_DIR"
           git fetch origin main && git reset --hard origin/main
 
       - name: Run dbt locally
         run:
-          cd ~"$PROJECT_DIR"
+          cd "$PROJECT_DIR"
           docker compose run --rm dbt deps
           docker compose run --rm dbt build
 
