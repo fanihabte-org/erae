@@ -2,10 +2,7 @@ name: "ERAE Dbt"
 on:
   pull_request:
   push:
-    branches: ['main']
-
-env:
-  COMPOSE: docker compose --env-file .env.ci -f docker-compose.yml -f docker-compose.ci.yml
+    branches: [ 'main' ]
 
 jobs:
   build:
@@ -13,19 +10,33 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Pull git repo
-        uses: actions/checkout@v4
+      - name: Pull down the repository
+        uses: actions/checkout@v7
 
       - name: Install Just
-        uses: extractions/setup-just@v2
+        uses: extractions/setup-just@v3
 
       - name: Install dbt dependencies
         run: |
           just deps
 
-      - name: Dbt fixture test
+      - name: Test dbt models structures
         run: |
           just ci
 
       - if: always()
         run: $COMPOSE down -v
+
+  deploy:
+    runs-on: [ self-hosted, linux, x64 ]
+    needs: build
+    env:
+      PROJECT_DIR: ${{ secrets.PROJECT_DIR }}
+    steps:
+      - name: Pull down the repository
+        uses: actions/checkout@v7
+
+      - name: Restart docker
+        run: |
+          cd "$PROJECT_DIR"
+          docker compose run --rm dbt run
