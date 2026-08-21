@@ -1,4 +1,4 @@
-name: "ERAE Dbt"
+name: "ERAE dbt"
 on:
   pull_request:
   push:
@@ -6,7 +6,7 @@ on:
 
 jobs:
   build:
-    name: Build & Test DBT
+    name: Build and test dbt
     runs-on: ubuntu-latest
 
     steps:
@@ -25,16 +25,20 @@ jobs:
           just ci
 
       - if: always()
-        run: $COMPOSE down -v
+        run: just down
 
   deploy:
-    runs-on: [ self-hosted, linux, x64 ]
+    name: Deploy to prod
     needs: build
+    runs-on: [ self-hosted, linux, x64 ]
     env:
       PROJECT_DIR: ${{ secrets.PROJECT_DIR }}
     steps:
       - name: Pull down the repository
         uses: actions/checkout@v7
+
+      - name: Install Just
+        uses: extractions/setup-just@v3
 
       - name: Restart docker
         run: |
