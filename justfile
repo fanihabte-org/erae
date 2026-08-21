@@ -27,4 +27,4 @@ down:
 dbt *ARGS:
     {{compose}} run --rm dbt {{ARGS}}
 
-ci: deps parse run down
+ci: deps parse build down
