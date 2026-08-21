@@ -20,7 +20,6 @@ jobs:
   deploy:
     name: Deploy to prod
     needs: build
-    if: github.event_name == 'push'
     runs-on: [ self-hosted, linux, x64 ]
     timeout-minutes: 10
 
