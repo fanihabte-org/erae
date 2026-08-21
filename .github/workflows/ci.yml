@@ -23,9 +23,9 @@ jobs:
         run: |
           just deps
 
-      - name: Parse
+      - name: Dbt fixture test
         run: |
-          just parse
+          just ci
 
       - if: always()
         run: $COMPOSE down -v

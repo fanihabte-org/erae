@@ -7,6 +7,7 @@ profile: "{{ env_var('DBT_PROFILE') }}"
 require-dbt-version: "1.12.2"
 vars:
   'dbt_date:time_zone': 'America/Los_Angeles'
+  db_name: "{{ env_var('PG_DB_NAME') }}"
 
 # Project directories
 model-paths: ["models"]
@@ -25,10 +26,25 @@ clean-targets:
 models:
   data_forge_analytics:
     staging:
+      +materialized: view
+      crm:
+        +schema: staging_crm
+      erp:
+        +schema: staging_erp
+      ops:
+        +schema: staging_ops
+
     intermediate:
       +materialized: view
+      ordering:
+        +schema: inter_ordering
+      shipping:
+        +schema: inter_shipping
+
     marts:
       +materialized: table
+      ordering:
+        +schema: mart_ordering
 
 # Snapshot models configuration
 snapshots:

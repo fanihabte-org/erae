@@ -1,6 +1,6 @@
 sources:
   - name: finance
-    database: rev_engine_bronze
+    database: "{{ env_var('PG_DB_NAME') }}"
     schema: erp
     tables:
         - name: companies

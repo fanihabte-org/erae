@@ -1,7 +1,7 @@
 services:
   postgres:
     platform: linux/amd64
-    image: postgres:15.8
+    image: postgres:16-alpine
     environment:
       POSTGRES_DB: ${PG_DB_NAME}
       POSTGRES_USER: ${PG_USER}
@@ -11,6 +11,8 @@ services:
       interval: 2s
       timeout: 3s
       retries: 20
+    volumes:
+      - ./ci_fixtures:/docker-entrypoint-initdb.d:ro
 
   dbt:
     depends_on:

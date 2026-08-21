@@ -9,6 +9,15 @@ deps:
 parse:
     {{compose}} run --rm dbt parse
 
+run:
+    {{compose}} run --rm dbt run
+
+snapshot:
+    {{compose}} run --rm dbt snapshot
+
+build:
+    {{compose}} run --rm dbt build
+
 empty:
     {{compose}} run --rm dbt build --empty
 
@@ -18,4 +27,4 @@ down:
 dbt *ARGS:
     {{compose}} run --rm dbt {{ARGS}}
 
-ci: deps parse empty down
+ci: deps parse run down

@@ -14,11 +14,11 @@ with orders as (
         on soo.customer_id = icu.customer_id
         and soo.created_at >= icu.valid_from
         and soo.created_at < icu.valid_to
-    join {{ ref('inter_opportunities') }} iop
+    left join {{ ref('inter_opportunities') }} iop
         on soo.opportunity_id = iop.opportunity_id
         and soo.created_at >= iop.valid_from
         and soo.created_at < iop.valid_to
-    join {{ ref('inter_dates') }} idts
+    left join {{ ref('inter_dates') }} idts
         on soo.order_date = idts.full_date
 )
 

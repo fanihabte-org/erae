@@ -1,6 +1,6 @@
 sources:
   - name: salesforce
-    database: rev_engine_bronze
+    database: "{{ env_var('PG_DB_NAME') }}"
     schema: crm
     tables:
       - name: account

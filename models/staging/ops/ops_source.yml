@@ -1,6 +1,6 @@
 sources:
   - name: operations
-    database: rev_engine_bronze
+    database: "{{ env_var('PG_DB_NAME') }}"
     schema: ops
     tables:
       - name: carriers
