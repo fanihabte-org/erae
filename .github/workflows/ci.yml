@@ -10,19 +10,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Pull down the repository
-        uses: actions/checkout@v7
-
-      - name: Install Just
-        uses: extractions/setup-just@v3
-
-      - name: Install dbt dependencies
-        run: |
-          just deps
-
-      - name: Test dbt models structures
-        run: |
-          just ci
+      - uses: actions/checkout@v7
+      - uses: extractions/setup-just@v3
+      - run: just ci
 
       - if: always()
         run: just down
@@ -30,17 +20,22 @@ jobs:
   deploy:
     name: Deploy to prod
     needs: build
+    if: github.event_name == 'push'
     runs-on: [ self-hosted, linux, x64 ]
+    timeout-minutes: 10
+
     env:
       PROJECT_DIR: ${{ secrets.PROJECT_DIR }}
+
     steps:
-      - name: Pull down the repository
-        uses: actions/checkout@v7
-
-      - name: Install Just
-        uses: extractions/setup-just@v3
-
-      - name: Restart docker
+      - name: Update repo
         run: |
           cd "$PROJECT_DIR"
-          docker compose run --rm dbt run
+          git fetch origin main && git reset --hard origin/main
+
+      - name: Run dbt locally
+        run:
+          cd "$PROJECT_DIR"
+          docker compose run --rm dbt deps
+          docker compose run --rm dbt build
+
