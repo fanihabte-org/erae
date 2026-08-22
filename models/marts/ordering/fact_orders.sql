@@ -1,3 +1,14 @@
+{{
+    config(
+        indexs = [
+            {
+                'columns': ['order_key', 'order_date_key', 'shipped_date_key'],
+                'type': 'btree'
+            }
+        ]
+    )
+}}
+
 with inter_orders as (
     select
         order_key
@@ -5,8 +16,10 @@ with inter_orders as (
         , customer_key
         , opportunity_key
         , order_date_key
-        , status
-        , updated_at
+        , processed_date_key
+        , shipped_date_key
+        , invoiced_date_key
+        , cancelled_date_key
     from {{ ref('inter_orders') }}
 )
 
@@ -14,9 +27,8 @@ with inter_orders as (
     select
         distinct on(order_id)
           order_id
-        , order_key
-        , status   as current_status
-    from inter_orders
+        , order_status_key
+    from {{ ref('inter_order_status') }}
     order by order_id, updated_at desc
 )
 
@@ -25,13 +37,12 @@ select
     , io.order_id
     , io.customer_key
     , io.opportunity_key
+    , cos.order_status_key   as cur_status_key
     , io.order_date_key
-    , crs.current_status
-    , max(case when io.status = 'PENDING'   then io.updated_at end) as processed_at
-    , max(case when io.status = 'SHIPPED'   then io.updated_at end) as shipped_at
-    , max(case when io.status = 'INVOICED'  then io.updated_at end) as invoiced_at
-    , max(case when io.status = 'CANCELLED' then io.updated_at end) as cancelled_at
+    , io.processed_date_key
+    , io.shipped_date_key
+    , io.invoiced_date_key
+    , io.cancelled_date_key
 from inter_orders io
-join current_order_status crs
-    on io.order_key = crs.order_key
-group by 1,2,3,4,5,6
+left join current_order_status cos
+    on io.order_id = cos.order_id

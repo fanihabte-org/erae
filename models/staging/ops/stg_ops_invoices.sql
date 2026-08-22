@@ -1,6 +1,6 @@
 with ops_invoices_cleaned as (
     select
-        invoice_id::bigint            as id
+        invoice_id::bigint
         , trim(upper(invoice_number)) as invoice_number
         , order_id::bigint            as order_id
         , trim(upper(currency_code))  as currency_iso_code

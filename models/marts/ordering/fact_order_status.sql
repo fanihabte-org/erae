@@ -1,6 +1,6 @@
 select
-    status_event_key
-    , order_key
+    order_status_key
+    , order_id
     , status
-    , changed_at
+    , updated_at
 from {{ ref('inter_order_status') }}

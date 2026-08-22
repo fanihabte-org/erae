@@ -16,25 +16,16 @@ with order_line as (
     from {{ ref('stg_ops_order_lines') }}
 )
 
-, earliest_order_key as (
-    select
-        distinct on(order_id)
-          order_id
-        , order_key
-    from {{ ref('inter_orders') }}
-    order by order_id, updated_at asc
-)
-
 select
-    order_item_key
-    , order_item_id
-    , eord.order_key   as earliest_order_key
+    ol.order_item_key
+    , ol.order_item_id
+    , eord.order_key
     , ipd.product_key
-    , quantity
-    , line_amount
-    , created_at
+    , ol.quantity
+    , ol.line_amount
+    , ol.created_at
 from order_line ol
-left join earliest_order_key eord
+left join {{ ref('inter_orders') }} eord
     on eord.order_id = ol.order_id
 join {{ ref('inter_products') }} ipd
     on ol.product_id = ipd.product_id

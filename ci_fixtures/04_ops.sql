@@ -1,4 +1,4 @@
-create table ops.carriers
+create table ops_raw.carriers
 (
     carrier_code       varchar(15)   not null,
     carrier_name       varchar(120)  not null,
@@ -12,7 +12,7 @@ create table ops.carriers
         primary key (carrier_code, updated_at)
 );
 
-create table ops.customers
+create table ops_raw.customers
 (
     customer_id        integer        not null,
     account_number     varchar(20)    not null,
@@ -33,7 +33,7 @@ create table ops.customers
         primary key (customer_id, updated_at)
 );
 
-create table ops.invoices
+create table ops_raw.invoices
 (
     invoice_id       bigint         not null,
     invoice_number   varchar(24)    not null,
@@ -49,7 +49,7 @@ create table ops.invoices
         primary key (invoice_id, updated_at)
 );
 
-create table ops.order_lines
+create table ops_raw.order_lines
 (
     order_line_id    bigint         not null,
     order_id         bigint         not null,
@@ -66,7 +66,7 @@ create table ops.order_lines
         primary key (order_line_id, updated_at)
 );
 
-create table ops.orders
+create table ops_raw.orders
 (
     order_id                bigint        not null,
     customer_id             integer       not null,
@@ -86,7 +86,7 @@ create table ops.orders
         primary key (order_id, updated_at)
 );
 
-create table ops.products
+create table ops_raw.products
 (
     product_id        integer        not null,
     sku               varchar(40)    not null,
@@ -105,7 +105,7 @@ create table ops.products
         primary key (product_id, updated_at)
 );
 
-create table ops.shipments
+create table ops_raw.shipments
 (
     shipment_id            bigint         not null,
     order_id               bigint         not null,
@@ -127,7 +127,7 @@ create table ops.shipments
         primary key (shipment_id, updated_at)
 );
 
-create table ops.support_cases
+create table ops_raw.support_cases
 (
     case_id          bigint      not null,
     customer_id      integer     not null,
@@ -146,7 +146,7 @@ create table ops.support_cases
         primary key (case_id, updated_at)
 );
 
-create table ops.warehouses
+create table ops_raw.warehouses
 (
     warehouse_code   varchar(10)   not null,
     warehouse_name   varchar(120)  not null,

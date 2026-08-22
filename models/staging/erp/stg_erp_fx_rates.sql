@@ -18,7 +18,7 @@ with erp_fex_rates_cleaned as (
         , dw_run_timestamp
               at time zone 'America/Los_Angeles'
               at time zone 'UTC'                 as dw_run_timestamp
-    from erp.fx_rates
+    from {{ source('finance', 'fx_rates') }}
 )
 
 select * from erp_fex_rates_cleaned

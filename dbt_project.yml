@@ -45,10 +45,13 @@ models:
       +materialized: table
       ordering:
         +schema: mart_ordering
+      shipping:
+        +schema: mart_shipping
 
 # Snapshot models configuration
 snapshots:
   data_forge_analytics:
     ordering:
+    shipping:
       +target_database: "{{ env_var('PG_DB_NAME') }}"
       +target_schema: "{{ env_var('PG_SNAPSHOT_SCHEMA') }}"

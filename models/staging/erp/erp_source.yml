@@ -1,7 +1,7 @@
 sources:
   - name: finance
     database: "{{ env_var('PG_DB_NAME') }}"
-    schema: erp
+    schema: erp_raw
     tables:
         - name: companies
         - name: cost_centers

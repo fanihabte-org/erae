@@ -1,0 +1,74 @@
+version: 2
+
+models:
+  - name: fact_orders
+    config:
+      contract:
+        enforced: true
+
+    columns:
+      - name: order_key
+        data_type: text
+        constraints:
+          - type: primary_key
+
+      - name: order_id
+        data_type: bigint
+        constraints:
+          - type: not_null
+
+      - name: customer_key
+        data_type: text
+        constraints:
+          - type: foreign_key
+            to: ref('dim_customers')
+            to_column: customer_key
+
+      - name: opportunity_key
+        data_type: text
+        constraints:
+          - type: foreign_key
+            to: ref('dim_opportunities')
+            to_column: opportunity_key
+
+      - name: cur_status_key
+        data_type: text
+        constraints:
+          - type: foreign_key
+            to: ref('fact_order_status')
+            to_column: order_status_key
+
+      - name: order_date_key
+        data_type: text
+        constraints:
+          - type: foreign_key
+            to: ref('dim_dates')
+            to_column: date_key
+
+      - name: processed_date_key
+        data_type: text
+        constraints:
+          - type: foreign_key
+            to: ref('dim_dates')
+            to_column: date_key
+
+      - name: shipped_date_key
+        data_type: text
+        constraints:
+          - type: foreign_key
+            to: ref('dim_dates')
+            to_column: date_key
+
+      - name: invoiced_date_key
+        data_type: text
+        constraints:
+          - type: foreign_key
+            to: ref('dim_dates')
+            to_column: date_key
+
+      - name: cancelled_date_key
+        data_type: text
+        constraints:
+          - type: foreign_key
+            to: ref('dim_dates')
+            to_column: date_key

@@ -1,7 +1,7 @@
 sources:
   - name: salesforce
     database: "{{ env_var('PG_DB_NAME') }}"
-    schema: crm
+    schema: crm_raw
     tables:
       - name: account
       - name: opportunity
