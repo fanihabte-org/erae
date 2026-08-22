@@ -11,3 +11,4 @@ erae:
       schema: "dbt_{{ env_var('PG_SCHEMA') }}"
       threads: 6
     ci: *pg
+    prod: *pg
