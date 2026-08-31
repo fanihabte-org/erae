@@ -1,4 +1,4 @@
-create table crm_raw.account
+create table crm.account
 (
     id                varchar(18)  not null,
     name              varchar(200) not null,
@@ -17,7 +17,7 @@ create table crm_raw.account
         primary key (id, lastmodifieddate)
 );
 
-create table crm_raw.opportunity
+create table crm.opportunity
 (
     id               varchar(18)  not null,
     accountid        varchar(18)  not null,

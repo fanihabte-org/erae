@@ -32,7 +32,7 @@ models:
             to_column: opportunity_key
 
       - name: cur_status_key
-        data_type: text
+        data_type: bigint
         constraints:
           - type: foreign_key
             to: ref('fact_order_status')

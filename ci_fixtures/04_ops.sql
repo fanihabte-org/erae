@@ -1,4 +1,4 @@
-create table ops_raw.carriers
+create table ops.carriers
 (
     carrier_code       varchar(15)   not null,
     carrier_name       varchar(120)  not null,
@@ -12,7 +12,7 @@ create table ops_raw.carriers
         primary key (carrier_code, updated_at)
 );
 
-create table ops_raw.customers
+create table ops.customers
 (
     customer_id        integer        not null,
     account_number     varchar(20)    not null,
@@ -33,7 +33,7 @@ create table ops_raw.customers
         primary key (customer_id, updated_at)
 );
 
-create table ops_raw.invoices
+create table ops.invoices
 (
     invoice_id       bigint         not null,
     invoice_number   varchar(24)    not null,
@@ -49,7 +49,7 @@ create table ops_raw.invoices
         primary key (invoice_id, updated_at)
 );
 
-create table ops_raw.order_lines
+create table ops.order_lines
 (
     order_line_id    bigint         not null,
     order_id         bigint         not null,
@@ -66,7 +66,7 @@ create table ops_raw.order_lines
         primary key (order_line_id, updated_at)
 );
 
-create table ops_raw.orders
+create table ops.orders
 (
     order_id                bigint        not null,
     customer_id             integer       not null,
@@ -86,7 +86,7 @@ create table ops_raw.orders
         primary key (order_id, updated_at)
 );
 
-create table ops_raw.products
+create table ops.products
 (
     product_id        integer        not null,
     sku               varchar(40)    not null,
@@ -105,7 +105,7 @@ create table ops_raw.products
         primary key (product_id, updated_at)
 );
 
-create table ops_raw.shipments
+create table ops.shipments
 (
     shipment_id            bigint         not null,
     order_id               bigint         not null,
@@ -127,7 +127,7 @@ create table ops_raw.shipments
         primary key (shipment_id, updated_at)
 );
 
-create table ops_raw.support_cases
+create table ops.support_cases
 (
     case_id          bigint      not null,
     customer_id      integer     not null,
@@ -146,7 +146,7 @@ create table ops_raw.support_cases
         primary key (case_id, updated_at)
 );
 
-create table ops_raw.warehouses
+create table ops.warehouses
 (
     warehouse_code   varchar(10)   not null,
     warehouse_name   varchar(120)  not null,
@@ -159,4 +159,65 @@ create table ops_raw.warehouses
     constraint pk_warehouses
         primary key (warehouse_code, updated_at)
 );
+
+create table ops.invoice_status_history
+(
+    invoice_status_event_id bigint      not null primary key,
+    invoice_id              bigint      not null,
+    previous_status         varchar(20),
+    new_status              varchar(20) not null,
+    occurred_at             timestamp   not null,
+    recorded_at             timestamp   not null,
+    source_event_id         varchar(64) not null,
+    sla_due_at              timestamp,
+    sla_status              varchar(10) not null,
+    anomaly_type            varchar(80),
+    dw_run_timestamp        timestamp   not null
+);
+
+create table ops.order_status_history
+(
+    order_status_event_id bigint      not null primary key,
+    order_id              bigint      not null,
+    previous_status       varchar(20),
+    new_status            varchar(20) not null,
+    occurred_at           timestamp   not null,
+    recorded_at           timestamp   not null,
+    source_event_id       varchar(64) not null,
+    sla_due_at            timestamp,
+    sla_status            varchar(10) not null,
+    anomaly_type          varchar(80),
+    dw_run_timestamp      timestamp   not null
+);
+
+create table ops.shipment_status_history
+(
+    shipment_status_event_id bigint      not null primary key,
+    shipment_id              bigint      not null,
+    previous_status          varchar(20),
+    new_status               varchar(20) not null,
+    occurred_at              timestamp   not null,
+    recorded_at              timestamp   not null,
+    source_event_id          varchar(64) not null,
+    sla_due_at               timestamp,
+    sla_status               varchar(10) not null,
+    anomaly_type             varchar(80),
+    dw_run_timestamp         timestamp   not null
+);
+
+create table ops.support_case_status_history
+(
+    support_case_status_event_id bigint      not null primary key,
+    case_id                      bigint      not null,
+    previous_status              varchar(20),
+    new_status                   varchar(20) not null,
+    occurred_at                  timestamp   not null,
+    recorded_at                  timestamp   not null,
+    source_event_id              varchar(64) not null,
+    sla_due_at                   timestamp,
+    sla_status                   varchar(10) not null,
+    anomaly_type                 varchar(80),
+    dw_run_timestamp             timestamp   not null
+);
+
 

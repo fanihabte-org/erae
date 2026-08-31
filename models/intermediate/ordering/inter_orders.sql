@@ -19,15 +19,17 @@ with orders_customer_opps as (
 
 , order_event_dates_pivot as (
     select
-        order_id
-        , customer_key
-        , opportunity_key
-        , order_date
-        , max(case when status = 'PENDING'   then updated_at end) as processed_at
-        , max(case when status = 'SHIPPED'   then updated_at end) as shipped_at
-        , max(case when status = 'INVOICED'  then updated_at end) as invoiced_at
-        , max(case when status = 'CANCELLED' then updated_at end) as cancelled_at
-    from orders_customer_opps
+        oco.order_id
+        , oco.customer_key
+        , oco.opportunity_key
+        , oco.order_date
+        , max(case when ios.status = 'PENDING'   then ios.occurred_at end)::date as processed_at
+        , max(case when ios.status = 'SHIPPED'   then ios.occurred_at end)::date as shipped_at
+        , max(case when ios.status = 'INVOICED'  then ios.occurred_at end)::date as invoiced_at
+        , max(case when ios.status = 'CANCELLED' then ios.occurred_at end)::date as cancelled_at
+    from orders_customer_opps oco
+    left join {{ ref('inter_order_status') }} ios
+        on oco.order_id = ios.order_id
     group by 1, 2, 3, 4
 )
 

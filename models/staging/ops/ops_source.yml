@@ -1,7 +1,7 @@
 sources:
   - name: operations
     database: "{{ env_var('PG_DB_NAME') }}"
-    schema: ops_raw
+    schema: ops
     tables:
       - name: carriers
       - name: customers
@@ -12,3 +12,7 @@ sources:
       - name: shipments
       - name: support_cases
       - name: warehouses
+      - name: shipment_status_history
+      - name: invoice_status_history
+      - name: order_status_history
+      - name: support_case_status_history

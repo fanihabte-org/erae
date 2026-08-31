@@ -1,3 +1,3 @@
-create schema crm_raw;
-create schema ops_raw;
-create schema erp_raw;
+create schema crm;
+create schema ops;
+create schema erp;

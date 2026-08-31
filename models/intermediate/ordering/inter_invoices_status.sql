@@ -1,14 +1,10 @@
 with invoices_all_states as (
     select
-        {{
-            dbt_utils.generate_surrogate_key (
-                ['invoice_id', 'status']
-            )
-        }}           as invoice_status_key
+        id             as invoice_status_key
         , invoice_id
-        , status
-        , updated_at
-    from {{ ref('stg_ops_invoices') }}
+        , new_status   as status
+        , occurred_at
+    from {{ ref('stg_invoice_status_history') }}
 )
 
 select * from invoices_all_states

@@ -29,7 +29,7 @@ with inter_orders as (
           order_id
         , order_status_key
     from {{ ref('inter_order_status') }}
-    order by order_id, updated_at desc
+    order by order_id, occurred_at desc
 )
 
 select
