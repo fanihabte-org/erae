@@ -1,7 +1,9 @@
+FROM fanihabte/base-dbt-postgres:1.0.1
 LABEL authors="Faniel Habte"
 
-FROM fanihabte/dbt-postgres:1.0.0
-COPY . ./erea/
+WORKDIR /erae
+
+COPY . .
 
 RUN dbt deps
 

@@ -1,7 +1,6 @@
 services:
   dbt:
-    platform: linux/amd64
-    image: fanihabte/base-dbt-postgres:1.0.1
+    build: .
     volumes:
       - .:/usr/app/dbt
       - dbt-packages:/opt/dbt_packages

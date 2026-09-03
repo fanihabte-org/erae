@@ -25,6 +25,6 @@ down:
     {{compose}} down -v
 
 dbt *ARGS:
-    {{compose}} run --rm dbt {{ARGS}}
+    docker compose run --rm dbt {{ARGS}}
 
 ci: deps parse build down
