@@ -3,11 +3,11 @@ name: "data_forge_analytics"
 version: '1.0.0'
 
 # Profile configuration
-profile: "{{ env_var('DBT_PROFILE') }}"
+profile: "{{ env_var('DBT_PROFILE', 'dev') }}"
 require-dbt-version: "1.12.2"
 vars:
   'dbt_date:time_zone': 'America/Los_Angeles'
-  db_name: "{{ env_var('PG_DB_NAME') }}"
+  db_name: "{{ env_var('PG_DB_NAME', 'erae') }}"
 
 # Project directories
 model-paths: ["models"]
@@ -53,5 +53,5 @@ snapshots:
   data_forge_analytics:
     ordering:
     shipping:
-      +target_database: "{{ env_var('PG_DB_NAME') }}"
-      +target_schema: "{{ env_var('PG_SNAPSHOT_SCHEMA') }}"
+      +target_database: "{{ env_var('PG_DB_NAME', 'erae') }}"
+      +target_schema: "{{ env_var('PG_SNAPSHOT_SCHEMA', 'snapshot') }}"

@@ -1,11 +1,10 @@
 services:
   dbt:
-    build: .
+    image: fanihabte/erae-dbt:1.0.0
     volumes:
       - .:/usr/app/dbt
       - dbt-packages:/opt/dbt_packages
-    env_file:
-      - ${ENV_FILE:-.env}
+    env_file: .env
 
 volumes:
   dbt-packages:

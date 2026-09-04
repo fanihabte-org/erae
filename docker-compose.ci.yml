@@ -15,6 +15,10 @@ services:
       - ./ci_fixtures:/docker-entrypoint-initdb.d:ro
 
   dbt:
+    image: fanihabte/erae-dbt:1.0.0
     depends_on:
       postgres:
         condition: service_healthy
+    volumes:
+      - .:/usr/app/dbt
+    env_file: .env.ci

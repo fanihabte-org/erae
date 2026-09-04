@@ -1,0 +1,7 @@
+.env
+.env.ci
+.gitignore
+/dbt_packages
+/logs
+/target
+.user.yml

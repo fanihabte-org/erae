@@ -5,5 +5,8 @@ WORKDIR /erae
 
 COPY . .
 
+# Run dbt deps during build stage
 RUN dbt deps
 
+ENTRYPOINT ["dbt"]
+CMD ["run"]

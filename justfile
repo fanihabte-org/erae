@@ -1,4 +1,4 @@
-compose := "docker compose --env-file .env.ci -f docker-compose.yml -f docker-compose.ci.yml"
+compose := "docker compose --env-file .env.ci -f docker-compose.ci.yml"
 
 defult:
     @just --list
